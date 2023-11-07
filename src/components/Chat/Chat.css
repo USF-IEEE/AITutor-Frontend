@@ -1,0 +1,8 @@
+#chat-container {
+    position: relative;
+    display: flex;
+    padding: 3rem;
+    width: 40%;
+}
+
+
