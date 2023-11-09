@@ -30,7 +30,7 @@ export default function Chat() {
 
     const [chat, setChat] = useState<Message[]>([])
 
-    function handleSubmit(event) {
+    function handleSubmit(event: { preventDefault: () => void; }) {
         event.preventDefault()
         let newMessage = new Message(message, true)
         setChat([...chat, newMessage])
