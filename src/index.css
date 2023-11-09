@@ -48,11 +48,12 @@ button:focus-visible {
 
 .watermark {
   position: absolute;
-  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  opacity: 60%;
+  opacity: 20%;
   color: azure;
   width: fit-content;
+  font-size: 50px;
+  z-index: 0;
 }

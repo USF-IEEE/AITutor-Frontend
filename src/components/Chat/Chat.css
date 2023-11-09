@@ -1,8 +1,40 @@
 #chat-container {
     position: relative;
     display: flex;
+    flex-flow: column;
     padding: 3rem;
     width: 40%;
+    /* border: green solid 1px; */
+    max-height: 100%;
 }
 
+.text-container{
+    /* border: red solid 1px; */
+    max-height: 92%;
+    overflow: auto;
+    display: flex;
+    flex-flow: column;
+    overflow-y: scroll;
+}
+
+.prompt-submit {
+    position: absolute;
+    bottom: 2rem;
+    margin: auto;
+    width: 90%;
+    left: 1rem;
+    right: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.prompt-submit > input{
+    width: 70%;
+    padding: .55rem;
+}
+
+.prompt-submit > button {
+    width: 20%;
+}
 

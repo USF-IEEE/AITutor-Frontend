@@ -1,0 +1,19 @@
+.message-bubble{
+    background-color: #282828;
+    border-radius: 5px;
+    border: #fefefe solid 2px;
+    margin: 1rem;
+    padding: 1rem;
+    width: fit-content;
+    height: fit-content;
+    max-width: 70%;
+    z-index: 100;
+}
+
+.message-bubble-prompt {
+    justify-self: right;
+}
+
+.message-bubble-prompt {
+    justify-self: left;
+}
