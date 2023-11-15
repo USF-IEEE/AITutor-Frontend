@@ -1,11 +1,13 @@
 import MessageBubble from '../MessageBubble/MessageBubble'
 import './Chat.css'
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import axios from 'axios';
 
 interface ChatBubble {
     message: string;
     isPrompt: boolean;
 }
+
 
 class Message implements ChatBubble {
     message: string;
@@ -18,25 +20,70 @@ class Message implements ChatBubble {
 
 export default function Chat() {
 
+    //generating a sessionID to recognize user
+    const sessionId = sessionStorage.getItem("sessionId");
+
     // making an array of objects where the text will have a different layout depending on if its a response or a prompt
     // this array of objects is what we will display in the chat window
-
+    
     // message is a string retreived from the input in the chat
-    const [message, setMessage] = useState("")
-
+    const [message, setMessage] = useState<string>("")
+    
     //prompt will be an object with isPrompt == True (USER)
     //response will be an object with isPrompt == False (AI TUTOR)
     //each will have a message attribute with the content. 
+    const WelcomeMessage = new Message("Welcome to Teach-A-Bull! Type a prompt to begin.", false)
+    
+    const [chat, setChat] = useState<Message[]>([WelcomeMessage])
 
-    const [chat, setChat] = useState<Message[]>([])
+    // states = 0: sysOut, 1:state , 2: sessionId.
+    const chatContainerRef = useRef<HTMLDivElement>(null);
 
     function handleSubmit(event: { preventDefault: () => void; }) {
         event.preventDefault()
-        let newMessage = new Message(message, true)
-        setChat([...chat, newMessage])
-        console.log(`chat: ${chat}\nmessage: ${message}`)
-        setMessage("")
+
+
+        // before adding new message check size.
+        function makeRequest(prompt:string){// URL to which you want to send the POST request
+        
+            console.log("Making request with prompt: " + prompt)
+            const url = 'http://127.0.0.1:8000/session/'; //change to actual API URL.
+            
+            // Data to be sent in the request body
+            const data = {
+                "session_key": sessionId,
+                "user_prompt": prompt,
+            }
+            
+            // Sending the POST request using axios
+            axios.post(url,data)
+              .then(response => {
+                // Handle the successful response
+                console.log('Status Code:', response.status);
+                console.log('Response Data:', response.data);
+    
+                const newResponse = new Message(response.data.response, false)
+                setChat([...chat, newResponse])
+                setMessage("")
+              })
+              .catch(error => {
+                // Handle errors
+                console.error('Something happen while POST request\nError:', error);
+              });
+    
+            }
+        makeRequest(message);
     }
+    useEffect(() => {
+        console.log(`this is the current chat: ${chat}`);
+      }, [chat]);
+
+      useEffect(() => {
+        // Scroll to the bottom of the chat container after updating the chat state
+        if (chatContainerRef.current) {
+          chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+        }
+      }, [chat]);
 
     return (
         <div id='chat-container'>
@@ -56,7 +103,8 @@ export default function Chat() {
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                 />
-                <button type='submit'>Send</button>
+                <button onClick={() => {const newUserPrompt = new Message(message, true)
+                setChat([...chat, newUserPrompt])}} type='submit'>Send</button>
             </form>
         </div>
     )
