@@ -1,9 +1,14 @@
-import "./MessageBubble.css"
+import "./MessageBubble.css";
 
-export default function MessageBubble({message, isPrompt}:{message:string, isPrompt:boolean}) {
+interface MessageBubbleProps {
+  message: string;
+  isPrompt: boolean;
+}
+
+export default function MessageBubble({ message, isPrompt }: MessageBubbleProps) {
   return (
-    {isPrompt} ? 
-    <p className="message-bubble message-bubble-prompt">{`"${message}" `}is a prompt</p> : 
-    <p className="mesage-bubble message-bubble-response">{`"${message}"`} is a response</p> 
-  )
+    <p className={`message-bubble ${isPrompt ? 'message-bubble-prompt' : 'message-bubble-response'}`}>
+      {`${isPrompt ? 'User:' : 'Server:'} "${message}"`}
+    </p>
+  );
 }

@@ -1,7 +1,7 @@
 .message-bubble{
-    background-color: #282828;
+    background-color: #4a4a4a;
     border-radius: 5px;
-    border: #fefefe solid 2px;
+    border: #fefefe70 solid 2px;
     margin: .5rem 0;
     padding: 1rem;
     width: fit-content;
@@ -10,10 +10,10 @@
     z-index: 100;
 }
 
-.message-bubble-prompt {
-    justify-self: right;
+.message-bubble-response {
+    justify-self: flex-start; /* Align to the right for responses */
 }
 
 .message-bubble-prompt {
-    justify-self: left;
+    align-self: flex-end;
 }

@@ -30,11 +30,13 @@
 }
 
 .prompt-submit > input{
+    font-size: 1.2rem;
     width: 70%;
     padding: .55rem;
 }
 
 .prompt-submit > button {
     width: 20%;
+    font-size: 1.2rem;
 }
 
