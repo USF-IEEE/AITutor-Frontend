@@ -53,7 +53,7 @@ button:focus-visible {
   transform: translate(-50%, -50%);
   opacity: 20%;
   color: azure;
-  width: fit-content;
+  width: max-content;
   font-size: 50px;
   z-index: 0;
 }

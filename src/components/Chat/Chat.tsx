@@ -8,7 +8,6 @@ interface ChatBubble {
     isPrompt: boolean;
 }
 
-
 class Message implements ChatBubble {
     message: string;
     isPrompt: boolean;
@@ -19,9 +18,15 @@ class Message implements ChatBubble {
 }
 
 export default function Chat() {
+    
+    //kepp track of current state
+    const [state, setState] = useState<number>(-1);
+
+    //keep track of when things are loading.
+    const [loading, setLoading] = useState(true);
 
     //generating a sessionID to recognize user
-    const sessionId = sessionStorage.getItem("sessionId");
+    const [session_key, setSession_key] = useState<string>("")
 
     // making an array of objects where the text will have a different layout depending on if its a response or a prompt
     // this array of objects is what we will display in the chat window
@@ -32,7 +37,7 @@ export default function Chat() {
     //prompt will be an object with isPrompt == True (USER)
     //response will be an object with isPrompt == False (AI TUTOR)
     //each will have a message attribute with the content. 
-    const WelcomeMessage = new Message("Welcome to Teach-A-Bull! Type a prompt to begin.", false)
+    const WelcomeMessage = new Message("Welcome to Teach-A-Bull! What do you want to learn today?", false)
     
     const [chat, setChat] = useState<Message[]>([WelcomeMessage])
 
@@ -51,7 +56,7 @@ export default function Chat() {
             
             // Data to be sent in the request body
             const data = {
-                "session_key": sessionId,
+                "session_key": session_key,
                 "user_prompt": prompt,
             }
             
@@ -61,17 +66,19 @@ export default function Chat() {
                 // Handle the successful response
                 console.log('Status Code:', response.status);
                 console.log('Response Data:', response.data);
-    
-                const newResponse = new Message(response.data.response, false)
+                
+                setSession_key(response.data.response.session_key)
+                const newResponse = new Message(response.data.response.prompt.question, false)
                 setChat([...chat, newResponse])
-                setMessage("")
+                console.log(session_key)
+                setLoading(false)
               })
               .catch(error => {
                 // Handle errors
                 console.error('Something happen while POST request\nError:', error);
               });
-    
             }
+        setMessage("")
         makeRequest(message);
     }
     useEffect(() => {
