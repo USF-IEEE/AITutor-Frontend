@@ -1,13 +1,13 @@
 import MessageBubble from '../MessageBubble/MessageBubble'
 import './Chat.css'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios';
+import Loading from '../Loading/Loading';
 
 interface ChatBubble {
     message: string;
     isPrompt: boolean;
 }
-
 
 class Message implements ChatBubble {
     message: string;
@@ -19,9 +19,16 @@ class Message implements ChatBubble {
 }
 
 export default function Chat() {
+    
+    // keep track of current state
+    const [state, setState] = useState<number>(-1);
+    const [promptType, setPromptType] = useState<number>(-2)
+
+    //keep track of when things are loading.
+    const [loading, setLoading] = useState<boolean>();
 
     //generating a sessionID to recognize user
-    const sessionId = sessionStorage.getItem("sessionId");
+    const [session_key, setSession_key] = useState<string>("")
 
     // making an array of objects where the text will have a different layout depending on if its a response or a prompt
     // this array of objects is what we will display in the chat window
@@ -32,12 +39,9 @@ export default function Chat() {
     //prompt will be an object with isPrompt == True (USER)
     //response will be an object with isPrompt == False (AI TUTOR)
     //each will have a message attribute with the content. 
-    const WelcomeMessage = new Message("Welcome to Teach-A-Bull! Type a prompt to begin.", false)
+    const WelcomeMessage = new Message("Welcome to Teach-A-Bull! What do you want to learn today?", false)
     
     const [chat, setChat] = useState<Message[]>([WelcomeMessage])
-
-    // states = 0: sysOut, 1:state , 2: sessionId.
-    const chatContainerRef = useRef<HTMLDivElement>(null);
 
     function handleSubmit(event: { preventDefault: () => void; }) {
         event.preventDefault()
@@ -45,13 +49,13 @@ export default function Chat() {
 
         // before adding new message check size.
         function makeRequest(prompt:string){// URL to which you want to send the POST request
-        
+            
             console.log("Making request with prompt: " + prompt)
             const url = 'http://127.0.0.1:8000/session/'; //change to actual API URL.
             
             // Data to be sent in the request body
             const data = {
-                "session_key": sessionId,
+                "session_key": session_key,
                 "user_prompt": prompt,
             }
             
@@ -61,30 +65,37 @@ export default function Chat() {
                 // Handle the successful response
                 console.log('Status Code:', response.status);
                 console.log('Response Data:', response.data);
-    
-                const newResponse = new Message(response.data.response, false)
+                
+                setSession_key(response.data.session_key)
+                setState(response.data.current_state)
+                setPromptType(response.data.response.prompt.type)
+                const newResponse = new Message(response.data.response.prompt.question, false)
                 setChat([...chat, newResponse])
-                setMessage("")
+                console.log(`session key is ${session_key}\ncurrent state is ${state}\nprompt type is ${promptType}`)
+                setLoading(false)
               })
               .catch(error => {
                 // Handle errors
                 console.error('Something happen while POST request\nError:', error);
               });
-    
             }
+        setLoading(true)
+        setMessage("")
         makeRequest(message);
     }
+
+    // this makes sure the container is visible when chat overflows
     useEffect(() => {
         console.log(`this is the current chat: ${chat}`);
-      }, [chat]);
-
-      useEffect(() => {
-        // Scroll to the bottom of the chat container after updating the chat state
-        if (chatContainerRef.current) {
-          chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+        let chatContainer: HTMLElement | null = document.querySelector(".text-container");
+        if (chatContainer != null){
+            chatContainer.scrollTop = chatContainer.scrollHeight;
         }
-      }, [chat]);
+      }, [chat])
+        
 
+
+    
     return (
         <div id='chat-container'>
             <h3 className='watermark'>Teach-A-Bull</h3>
@@ -95,6 +106,7 @@ export default function Chat() {
                     )
                 })
                 }
+            {loading && <Loading/>}
             </div>
             <form className='prompt-submit' onSubmit={handleSubmit}>
                 <input
