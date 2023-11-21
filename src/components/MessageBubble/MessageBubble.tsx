@@ -7,8 +7,11 @@ interface MessageBubbleProps {
 
 export default function MessageBubble({ message, isPrompt }: MessageBubbleProps) {
   return (
-    <p className={`message-bubble ${isPrompt ? 'message-bubble-prompt' : 'message-bubble-response'}`}>
-      {`${isPrompt ? 'User:' : 'Server:'} "${message}"`}
-    </p>
+    <div className={`message-bubble ${isPrompt ? "message-bubble-prompt" : "message-bubble-response"}`}>
+      <div className="message-bubble-user" style={{ fontWeight: 800 }}>{isPrompt ? 'User' : 'Tutor'}</div>
+      <p className={`message-bubble-message ${isPrompt ? 'message-bubble-prompt' : 'message-bubble-response'}`}>
+        {`${message}`}
+      </p>
+    </div>
   );
 }

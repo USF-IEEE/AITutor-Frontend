@@ -2,7 +2,7 @@
     position: relative;
     display: flex;
     flex-flow: column;
-    padding: 3rem;
+    padding: 3rem 1rem;
     width: 40%;
     /* border: green solid 1px; */
     max-height: 100%;
@@ -10,6 +10,7 @@
 
 .text-container{
     /* border: red solid 1px; */
+    height: 92%;
     max-height: 92%;
     overflow: auto;
     display: flex;

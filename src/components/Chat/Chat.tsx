@@ -1,7 +1,8 @@
 import MessageBubble from '../MessageBubble/MessageBubble'
 import './Chat.css'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios';
+import Loading from '../Loading/Loading';
 
 interface ChatBubble {
     message: string;
@@ -19,11 +20,12 @@ class Message implements ChatBubble {
 
 export default function Chat() {
     
-    //kepp track of current state
+    // keep track of current state
     const [state, setState] = useState<number>(-1);
+    const [promptType, setPromptType] = useState<number>(-2)
 
     //keep track of when things are loading.
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState<boolean>();
 
     //generating a sessionID to recognize user
     const [session_key, setSession_key] = useState<string>("")
@@ -41,16 +43,13 @@ export default function Chat() {
     
     const [chat, setChat] = useState<Message[]>([WelcomeMessage])
 
-    // states = 0: sysOut, 1:state , 2: sessionId.
-    const chatContainerRef = useRef<HTMLDivElement>(null);
-
     function handleSubmit(event: { preventDefault: () => void; }) {
         event.preventDefault()
 
 
         // before adding new message check size.
         function makeRequest(prompt:string){// URL to which you want to send the POST request
-        
+            
             console.log("Making request with prompt: " + prompt)
             const url = 'http://127.0.0.1:8000/session/'; //change to actual API URL.
             
@@ -67,10 +66,12 @@ export default function Chat() {
                 console.log('Status Code:', response.status);
                 console.log('Response Data:', response.data);
                 
-                setSession_key(response.data.response.session_key)
+                setSession_key(response.data.session_key)
+                setState(response.data.current_state)
+                setPromptType(response.data.response.prompt.type)
                 const newResponse = new Message(response.data.response.prompt.question, false)
                 setChat([...chat, newResponse])
-                console.log(session_key)
+                console.log(`session key is ${session_key}\ncurrent state is ${state}\nprompt type is ${promptType}`)
                 setLoading(false)
               })
               .catch(error => {
@@ -78,20 +79,23 @@ export default function Chat() {
                 console.error('Something happen while POST request\nError:', error);
               });
             }
+        setLoading(true)
         setMessage("")
         makeRequest(message);
     }
+
+    // this makes sure the container is visible when chat overflows
     useEffect(() => {
         console.log(`this is the current chat: ${chat}`);
-      }, [chat]);
-
-      useEffect(() => {
-        // Scroll to the bottom of the chat container after updating the chat state
-        if (chatContainerRef.current) {
-          chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+        let chatContainer: HTMLElement | null = document.querySelector(".text-container");
+        if (chatContainer != null){
+            chatContainer.scrollTop = chatContainer.scrollHeight;
         }
-      }, [chat]);
+      }, [chat])
+        
 
+
+    
     return (
         <div id='chat-container'>
             <h3 className='watermark'>Teach-A-Bull</h3>
@@ -102,6 +106,7 @@ export default function Chat() {
                     )
                 })
                 }
+            {loading && <Loading/>}
             </div>
             <form className='prompt-submit' onSubmit={handleSubmit}>
                 <input

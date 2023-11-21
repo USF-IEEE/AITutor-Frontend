@@ -1,8 +1,5 @@
 .message-bubble{
-    background-color: #4a4a4a;
-    border-radius: 5px;
-    border: #fefefe70 solid 2px;
-    margin: .5rem 0;
+    margin: .25rem 0 .25rem;
     padding: 1rem;
     width: fit-content;
     height: fit-content;
@@ -10,10 +7,23 @@
     z-index: 100;
 }
 
+.message-bubble-message {
+    margin: .5rem 0;
+    padding: 1rem;
+    background-color: #4a4a4a;
+    border-radius: 5px;
+}
+
 .message-bubble-response {
+    width: auto;
     justify-self: flex-start; /* Align to the right for responses */
 }
 
 .message-bubble-prompt {
     align-self: flex-end;
+    width: auto;
+}
+
+.message-bubble-prompt > .message-bubble-user {
+    text-align: right;
 }
