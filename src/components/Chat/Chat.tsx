@@ -89,7 +89,7 @@ export default function Chat() {
         console.log(`this is the current chat: ${chat}`);
         let chatContainer: HTMLElement | null = document.querySelector(".text-container");
         if (chatContainer != null){
-            chatContainer.scrollTop = chatContainer.scrollHeight;
+            chatContainer.scrollTop = chatContainer.scrollHeight - 10;
         }
       }, [chat])
         
@@ -115,7 +115,7 @@ export default function Chat() {
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                 />
-                <button onClick={() => {const newUserPrompt = new Message(message, true)
+                <button disabled={loading || message == ""} onClick={() => {const newUserPrompt = new Message(message, true)
                 setChat([...chat, newUserPrompt])}} type='submit'>Send</button>
             </form>
         </div>
