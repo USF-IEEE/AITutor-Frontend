@@ -42,7 +42,12 @@ export default function Chat() {
     const WelcomeMessage = new Message("Welcome to Teach-A-Bull! What do you want to learn today?", false)
     
     const [chat, setChat] = useState<Message[]>([WelcomeMessage])
+
     const chatContainerRef = useRef<HTMLDivElement | null>(null);
+    const loadingElement = useRef<HTMLDivElement | null>(null);
+
+    const [error, setError] = useState<string | undefined>();
+
 
     function handleSubmit(event: { preventDefault: () => void; }) {
         event.preventDefault()
@@ -77,7 +82,8 @@ export default function Chat() {
               })
               .catch(error => {
                 // Handle errors
-                console.error('Something happen while POST request\nError:', error);
+                console.error('Something happen while POST request\nError:',error);
+                setError(error.code)
               });
             }
         setLoading(true)
@@ -96,14 +102,15 @@ export default function Chat() {
     return (
         <div id='chat-container'>
             <h3 className='watermark'>Teach-A-Bull</h3>
-            <div className='text-container'>
+            <div className='text-container' ref={chatContainerRef}>
                 {chat.map((item:Message, key:React.Key) => {
                     return (
                         <MessageBubble key={key} message={item.message} isPrompt={item.isPrompt} />
                     )
                 })
                 }
-            {loading && <Loading/>}
+            {/* keep element visible container scrolled down */}
+            {loading && <div id='loading-element' ref={loadingElement}><Loading error={error}/></div>}
             <br></br>
             </div>
             <form className='prompt-submit' onSubmit={handleSubmit}>
