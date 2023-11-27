@@ -1,6 +1,6 @@
 import MessageBubble from '../MessageBubble/MessageBubble'
 import './Chat.css'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import axios from 'axios';
 import Loading from '../Loading/Loading';
 
@@ -42,6 +42,7 @@ export default function Chat() {
     const WelcomeMessage = new Message("Welcome to Teach-A-Bull! What do you want to learn today?", false)
     
     const [chat, setChat] = useState<Message[]>([WelcomeMessage])
+    const chatContainerRef = useRef<HTMLDivElement | null>(null);
 
     function handleSubmit(event: { preventDefault: () => void; }) {
         event.preventDefault()
@@ -84,17 +85,13 @@ export default function Chat() {
         makeRequest(message);
     }
 
-    // this makes sure the container is visible when chat overflows
+    // this makes sure the content is visible when chat overflows
     useEffect(() => {
-        console.log(`this is the current chat: ${chat}`);
-        let chatContainer: HTMLElement | null = document.querySelector(".text-container");
-        if (chatContainer != null){
-            chatContainer.scrollTop = chatContainer.scrollHeight - 10;
+        if (chatContainerRef.current) {
+            console.log(chatContainerRef.current.scrollHeight)
+          chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight
         }
-      }, [chat])
-        
-
-
+      }, [chat]);
     
     return (
         <div id='chat-container'>
@@ -107,6 +104,7 @@ export default function Chat() {
                 })
                 }
             {loading && <Loading/>}
+            <br></br>
             </div>
             <form className='prompt-submit' onSubmit={handleSubmit}>
                 <input

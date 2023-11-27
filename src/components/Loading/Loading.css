@@ -1,16 +1,26 @@
 .loading-animation {
     position: relative;
-    top: 20px;
-    left: 22px;
+    top: 5px;
+    margin: .25rem 0 .25rem;
+    padding: 1rem;
     width: fit-content;
-    background-color: transparent;
+    height: fit-content;
+    max-width: 70%;
+    background-color: #4a4a4a;
+    width: fit-content;
+    border-radius: 5px;
+    display: flex;
+   justify-content: center;
+   align-items: center;
  }
 
  .is-typing {
+   position: relative;
     width: fit-content;
     justify-content: space-around;
     display: flex;
     height: 20px;
+   top: 5px;
  }
 
  .jump1,
@@ -23,6 +33,7 @@
     border-radius: 100%;
     margin: .2rem;
     background-color: #fefefe;
+    animation-delay: 1.5s;
  }
 
  .jump1 {

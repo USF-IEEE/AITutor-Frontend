@@ -1,12 +1,12 @@
 import './App.css'
-import Sidebar from './components/Sidebar/Sidebar'
+import Content from './components/Content/Content'
 import Chat from './components/Chat/Chat'
 
 function App() {
 
   return (
     <>
-      <Sidebar/>
+      <Content/>
       <Chat />
     </>
   )
