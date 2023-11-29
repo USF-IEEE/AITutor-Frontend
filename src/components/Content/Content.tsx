@@ -1,13 +1,42 @@
-import "./Content.css"
+import React, { useContext, useEffect, useState } from "react";
 import Questionare from "../Questionare/Questionare";
+import Instructions from "../Intructions/Instructions";
+import { TutorContext, TutorContextProps } from "../../TutorContext";
+import "./Content.css"
 
-const Content = () => {
-    return(
-        <aside>
-            <h2 className="watermark">CONTENT</h2>
-            <Questionare/>
-        </aside>
-    )
-}
+const Content: React.FC = () => {
+  const { currentState } = useContext<TutorContextProps>(TutorContext);
+  const [currentContent, setCurrentContent] = useState<React.ReactNode | null>(null);
+
+  useEffect(() => {
+    switch (currentState) {
+      case 0:
+        setCurrentContent(<div className="variable-content-container">CurrentState 0</div>);
+        break;
+      case 1:
+        setCurrentContent(<div className="variable-content-container">CurrentState 1</div>);
+        break;
+      case 2:
+        setCurrentContent(<div className="variable-content-container">CurrentState 2</div>);
+        break;
+      case 3:
+        setCurrentContent(<div className="variable-content-container">CurrentState 3</div>);
+        break;
+      case 4:
+        setCurrentContent(<Questionare />);
+        break;
+      default:
+        setCurrentContent(<Instructions />);
+        break;
+    }
+  }, [currentState]);
+
+  return (
+    <aside className="content-container">
+      <h1 style={{position:"absolute"}}>{currentState}</h1>
+      {currentContent}
+    </aside>
+  );
+};
 
 export default Content;

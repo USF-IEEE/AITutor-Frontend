@@ -1,0 +1,24 @@
+.variable-content-container > h2{
+    position: relative;
+    font-size: 32px;
+    max-width: 70%;
+    top: 40px;
+}
+
+.instruction-box-container {
+    max-width: 90%;
+    min-height: 475px;
+    flex-flow: row wrap;
+    display: flex;
+    justify-content: space-evenly ;
+    align-content: space-evenly;
+}
+
+.instruction-box {
+    background-color: #2e2e2e;
+    margin: 1rem 0;
+    padding: 1.2rem 1rem;
+    max-width: 250px;
+    text-align: center;
+    border-radius: 10px;
+}

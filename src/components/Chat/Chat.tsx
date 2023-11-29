@@ -1,8 +1,10 @@
 import MessageBubble from '../MessageBubble/MessageBubble'
 import './Chat.css'
-import { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useContext } from 'react'
+import { TutorContext, TutorContextProps } from '../../TutorContext';
 import axios from 'axios';
 import Loading from '../Loading/Loading';
+
 
 interface ChatBubble {
     message: string;
@@ -18,34 +20,30 @@ class Message implements ChatBubble {
     }
 }
 
-export default function Chat() {
+const Chat:React.FC = () => {
     
-    // keep track of current state
-    const [state, setState] = useState<number>(-1);
-    const [promptType, setPromptType] = useState<number>(-2)
-
-    //keep track of when things are loading.
-    const [loading, setLoading] = useState<boolean>();
-
-    //generating a sessionID to recognize user
-    const [session_key, setSession_key] = useState<string>("")
-
+    // context vars
+    const {currentState, updateCurrentState} = useContext<TutorContextProps>(TutorContext);
+    const {sessionKey, updateSessionKey} = useContext<TutorContextProps>(TutorContext);
+    const {conceptList, updateConceptList} = useContext<TutorContextProps>(TutorContext);
+    const {promptType, updatePromptType} =useContext<TutorContextProps>(TutorContext);
+    
     // making an array of objects where the text will have a different layout depending on if its a response or a prompt
     // this array of objects is what we will display in the chat window
     
     // message is a string retreived from the input in the chat
-    const [message, setMessage] = useState<string>("")
-    
     //prompt will be an object with isPrompt == True (USER)
     //response will be an object with isPrompt == False (AI TUTOR)
     //each will have a message attribute with the content. 
+    const [suggestedResponse, setSuggestedResponse] = useState<string[]>([]);
+
     const WelcomeMessage = new Message("Welcome to Teach-A-Bull! What do you want to learn today?", false)
+    const [message, setMessage] = useState<string>("")
     
     const [chat, setChat] = useState<Message[]>([WelcomeMessage])
-
     const chatContainerRef = useRef<HTMLDivElement | null>(null);
     const loadingElement = useRef<HTMLDivElement | null>(null);
-
+    const [loading, setLoading] = useState<boolean>();
     const [error, setError] = useState<string | undefined>();
 
 
@@ -61,7 +59,7 @@ export default function Chat() {
             
             // Data to be sent in the request body
             const data = {
-                "session_key": session_key,
+                "session_key": sessionKey,
                 "user_prompt": prompt,
             }
             
@@ -72,12 +70,20 @@ export default function Chat() {
                 console.log('Status Code:', response.status);
                 console.log('Response Data:', response.data);
                 
-                setSession_key(response.data.session_key)
-                setState(response.data.current_state)
-                setPromptType(response.data.response.prompt.type)
+                updateSessionKey(response.data.session_key)
+                updateCurrentState(response.data.current_state)
+                updatePromptType(response.data.response.prompt.type)
+                updateConceptList(response.data.response.prompt.question.split("[SEP]"))
+                
                 const newResponse = new Message(response.data.response.prompt.question, false)
-                setChat([...chat, newResponse])
-                console.log(`session key is ${session_key}\ncurrent state is ${state}\nprompt type is ${promptType}`)
+                setChat((prevChat) => [...prevChat, newResponse]);
+
+                const newSuggestedResponses = response.data.response.prompt.suggested_responses;
+                // Update the state with the new suggested responses
+                setSuggestedResponse((prevResponses) => [...prevResponses, ...newSuggestedResponses]);
+
+
+                console.log(`session key is ${sessionKey}\ncurrent state is ${currentState}\nConcept List is ${conceptList}\nsuggested responses are: ${suggestedResponse}\nprompt type is ${promptType}`)
                 setLoading(false)
               })
               .catch(error => {
@@ -91,10 +97,10 @@ export default function Chat() {
         makeRequest(message);
     }
 
+
     // this makes sure the content is visible when chat overflows
     useEffect(() => {
         if (chatContainerRef.current) {
-            console.log(chatContainerRef.current.scrollHeight)
           chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight
         }
       }, [chat]);
@@ -110,6 +116,7 @@ export default function Chat() {
                 })
                 }
             {/* keep element visible container scrolled down */}
+
             {loading && <div id='loading-element' ref={loadingElement}><Loading error={error}/></div>}
             <br></br>
             </div>
@@ -127,3 +134,4 @@ export default function Chat() {
     )
 }
 
+export default Chat;

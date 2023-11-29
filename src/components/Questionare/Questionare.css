@@ -1,0 +1,38 @@
+.questionare-container{
+    display: flex;
+    margin: 1rem auto;
+    flex-flow: column;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 800px;
+    border: red solid 1px;
+    height: 400px;
+}
+
+.concept-list-container {
+    display: flex;
+    max-width: 95%;
+    gap: 1rem;
+    overflow-x: scroll;
+}
+
+.concept-box{
+    padding: .5rem .8rem;
+    background-color: #6e6e6e;
+    border-radius: 100px;
+    transition: .3s;
+    display: flex;
+    height: 20px;
+    white-space: nowrap;
+}
+
+.questionare-submit {
+    padding: .8rem;
+    background-color: #6e6e6e6e;
+    border-radius: 5px;
+    transition: .3s;
+}
+
+.questionare-submit:hover {
+    background-color: #2d2d2d;
+}
