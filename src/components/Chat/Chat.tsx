@@ -37,9 +37,9 @@ const Chat:React.FC = () => {
     //each will have a message attribute with the content. 
     const [suggestedResponse, setSuggestedResponse] = useState<string[]>([]);
 
-    const WelcomeMessage = new Message("Welcome to Teach-A-Bull! What do you want to learn today?", false)
     const [message, setMessage] = useState<string>("")
     
+    const WelcomeMessage = new Message("Welcome to Teach-A-Bull! What do you want to learn today?", false)
     const [chat, setChat] = useState<Message[]>([WelcomeMessage])
     const chatContainerRef = useRef<HTMLDivElement | null>(null);
     const loadingElement = useRef<HTMLDivElement | null>(null);
@@ -75,13 +75,12 @@ const Chat:React.FC = () => {
                 updatePromptType(response.data.response.prompt.type)
                 updateConceptList(response.data.response.prompt.question.split("[SEP]"))
                 
-                const newResponse = new Message(response.data.response.prompt.question, false)
+                const newResponse = new Message(response.data.response.prompt.question, false);
                 setChat((prevChat) => [...prevChat, newResponse]);
 
                 const newSuggestedResponses = response.data.response.prompt.suggested_responses;
                 // Update the state with the new suggested responses
                 setSuggestedResponse((prevResponses) => [...prevResponses, ...newSuggestedResponses]);
-
 
                 console.log(`session key is ${sessionKey}\ncurrent state is ${currentState}\nConcept List is ${conceptList}\nsuggested responses are: ${suggestedResponse}\nprompt type is ${promptType}`)
                 setLoading(false)
@@ -98,7 +97,7 @@ const Chat:React.FC = () => {
     }
 
 
-    // this makes sure the content is visible when chat overflows
+    // This makes sure the content is visible when chat overflows
     useEffect(() => {
         if (chatContainerRef.current) {
           chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight

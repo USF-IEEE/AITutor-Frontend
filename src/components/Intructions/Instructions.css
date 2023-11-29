@@ -8,6 +8,7 @@
 .instruction-box-container {
     max-width: 90%;
     min-height: 475px;
+    margin-bottom: 2rem;
     flex-flow: row wrap;
     display: flex;
     justify-content: space-evenly ;
@@ -16,7 +17,7 @@
 
 .instruction-box {
     background-color: #2e2e2e;
-    margin: 1rem 0;
+    margin: 1rem 0 ;
     padding: 1.2rem 1rem;
     max-width: 250px;
     text-align: center;

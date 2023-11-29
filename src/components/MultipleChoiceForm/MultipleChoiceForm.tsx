@@ -30,7 +30,7 @@ const MultipleChoiceForm: React.FC<MultipleChoiceFormProps> = ({ question, optio
               checked={selectedOption === option}
               onChange={handleOptionChange}
             />
-            <label htmlFor={`option${index}`}>{option}</label>
+            <label htmlFor={`option${index}`}> {option}</label>
           </div>
         ))}
       </form>

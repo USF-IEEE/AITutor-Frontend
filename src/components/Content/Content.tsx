@@ -26,7 +26,7 @@ const Content: React.FC = () => {
         setCurrentContent(<Questionare />);
         break;
       default:
-        setCurrentContent(<Instructions />);
+        setCurrentContent(<Questionare/>);
         break;
     }
   }, [currentState]);
