@@ -70,6 +70,7 @@ const Questionare: React.FC = () => {
 
             <div className="question-container">
                 <h2>Concept List</h2>
+                <p>Remove the concepts you wish to NOT be quizzed on or learn about</p>
                 <div className="concept-list-container">
                     {conceptList.length > 0 ? (
                         conceptList.map((concept: string, index: number) => (

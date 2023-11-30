@@ -11,7 +11,7 @@ const Content: React.FC = () => {
   useEffect(() => {
     switch (currentState) {
       case 0:
-        setCurrentContent(<div className="variable-content-container">CurrentState 0</div>);
+        setCurrentContent(<Instructions />);
         break;
       case 1:
         setCurrentContent(<div className="variable-content-container">CurrentState 1</div>);
