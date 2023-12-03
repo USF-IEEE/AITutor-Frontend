@@ -19,6 +19,15 @@
     overflow-x: hidden;
 }
 
+.suggested-response-container{
+    display: block;
+    margin-top: 1rem;
+    align-self: flex-end;
+    text-align: center;
+    max-width: 80%;
+    z-index: 100;
+}
+
 .prompt-submit {
     position: absolute;
     bottom: 2rem;

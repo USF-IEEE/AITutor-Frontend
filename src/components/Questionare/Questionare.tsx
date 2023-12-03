@@ -13,10 +13,12 @@ const Questionare: React.FC = () => {
     const { sessionKey } = useContext<TutorContextProps>(TutorContext)
 
     const [questionNumber, setQuestionNumber] = useState<number>(0)
-    const [purposeStatement, setPurposeStatement] = useState<string>('')
+    const [studentInterest, setStudentInterest] = useState<string>('')
     const [testingPreference, setTestingPreference] = useState<string>('')
     const [slidesPreference, setSlidesPreference] = useState<string>('')
     const [questionPreference, setQuestionPreference] = useState<string>('')
+
+    const [newConcept, setNewConcept] = useState<string>("");
 
     // make post request sending all the data back to the tutor
     function submitForm() {
@@ -25,17 +27,18 @@ const Questionare: React.FC = () => {
         function sendData() {// URL to which you want to send the POST request
 
             console.log("Sending questionare data...")
-            const url = 'http://127.0.0.1:8000/'; //change to actual API URL.
+            const url = 'http://127.0.0.1:8000/session/'; //change to actual API URL.
 
             // Data to be sent in the request body
             const data = {
+                "user_prompt":"",
                 "session_key": sessionKey,
-                "concept_list": conceptList,
-                "purpose_statement": purposeStatement,
-                "question_number": questionNumber,
+                "list_concepts": conceptList,
+                "student_interests": studentInterest,
+                "num_questions": questionNumber,
                 "testing_preference": testingPreference,
-                "slides_preference": slidesPreference,
-                "question_preference": questionPreference
+                "student_slides": slidesPreference,
+                "student_questions": questionPreference
             }
             console.log(data);
 
@@ -62,6 +65,11 @@ const Questionare: React.FC = () => {
         updateConceptList(newConcepts);
     }
 
+    function addConcept(newConcept: string) {  
+        updateConceptList([...conceptList , newConcept]);
+    }    
+    
+
     return (
         <div className="questionare-container">
             <h1>Questionare</h1>
@@ -80,6 +88,9 @@ const Questionare: React.FC = () => {
                         <strong>There are no concepts, sorry.</strong>
                     )}
                 </div>
+                
+                <input type="text" value={newConcept} onChange={(e) => { (setNewConcept(e.target.value)) }} placeholder="add a concept" />
+                <button onClick={() => {addConcept(newConcept);setNewConcept('')}}>Add</button>
 
             </div>
 
@@ -94,44 +105,29 @@ const Questionare: React.FC = () => {
                 </div>
             </div>
 
-
             <div className="question-container">
-                <h2>Purpose Statement</h2>
-                <p>Can you tell me more about yourself and what kinds of things you like to do or find interesting? We will use this to connect language and ideas to things you're interested in when I teach you later:</p>
-                <textarea value={purposeStatement} onChange={(e) => { setPurposeStatement(e.target.value) }} placeholder="example: I love sports and history"></textarea>
+                <h2>Student Interests</h2>
+                <p>Tell us more about yourself and what kinds of things you like to do or find interesting? We will use this to connect language and ideas to things you're interested in when I teach you later:</p>
+                <textarea value={studentInterest} onChange={(e) => { setStudentInterest(e.target.value) }} placeholder="example: I love sports and history"></textarea>
             </div>
-
 
             <div className="question-container">
                 <h2>Testing Preferences</h2>
-                <MultipleChoiceForm
-                    question="What kind of style do you want to be quizzed on?"
-                    options={['Option1', 'Option2', 'Option3', 'Option4']}
-                    setState={setTestingPreference}
-                />
+                <p>What types of questions do you want?</p>
+                <textarea value={testingPreference} onChange={(e) => { setTestingPreference(e.target.value) }} placeholder="example: conceptual, coding, math, literature"></textarea>
             </div>
-
-
-            <div className="question-container">
-                <h2>Slides Preferences</h2>
-                <MultipleChoiceForm
-                    question="What kind of slides would like to generate?"
-                    options={['Introductory', 'Related/Comparison', 'Exploratory', 'Explanatory (reiteration)', 'Example slides']}
-                    setState={setSlidesPreference}
-                />
-            </div>
-
 
             <div className="question-container">
                 <h2>Questions Preferences</h2>
-                <MultipleChoiceForm
-                    question="What types of questions would you like?"
-                    options={['Short Response', 'Multiple Choice', 'Math write output', 'Test Based Coding Questions']}
-                    setState={setQuestionPreference}
-                />
+                <p>What types of questions would you prefer?</p>
+                <textarea value={questionPreference} onChange={(e) => { setQuestionPreference(e.target.value) }} placeholder="example: multiple choice, short question, testing code, math solution"></textarea>
             </div>
 
-
+            <div className="question-container">
+                <h2>Slides Preferences</h2>
+                <p>What type of slides would you like to generate?</p>
+                <textarea value={slidesPreference} onChange={(e) => { setSlidesPreference(e.target.value) }} placeholder="example: introductory, example, "></textarea>
+            </div>
             <a className="questionare-submit" onClick={submitForm}>Send</a>
         </div>
 

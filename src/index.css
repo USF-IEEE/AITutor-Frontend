@@ -66,11 +66,10 @@ button:focus-visible {
 
 .variable-content-container {
   background-color: #5b5b5b;
-  margin: 6rem auto;
+  margin: 3rem auto;
   display: flex;
   max-width: 85%;
   min-height: 600px;
-  max-height: 85%;
   border-radius: 5px;
   flex-flow: column;
   justify-content: center;
@@ -78,5 +77,4 @@ button:focus-visible {
   border: rgb(144, 144, 144) 1px solid;
   gap: 1.75rem;
   text-align: center;
-  overflow-y: scroll;
 }

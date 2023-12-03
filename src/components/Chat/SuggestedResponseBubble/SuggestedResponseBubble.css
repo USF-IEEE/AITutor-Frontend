@@ -1,0 +1,10 @@
+.suggested-response-bubble {
+    display: block;
+    margin: 1rem;
+    padding: 1rem;
+    background-color: #4a4a4a;
+    border-radius: 5px;
+    transition: .3s cubic-bezier(0.39, 0.575, 0.565, 1);
+    cursor: pointer;
+}
+
