@@ -3,10 +3,11 @@
     margin: auto;
     width: 90%;
     height: 88dvh;
-    
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-flow: column;
 }
 
 .quote {
@@ -48,7 +49,7 @@
 }
 
 .quote {
-    animation: fadeIn 1s ease-in;
+    animation: shake 1s ease-in, fadeIn 1s ease-in;
 }
 
 .quote.fadeIn {
@@ -62,4 +63,19 @@
 .loading-screen-footer{
     font-weight: 800;
     font-size: 18px;
+}
+
+
+.loading-bar {
+    justify-self: flex-start;
+    width: 0%;
+    height: 5px; /* Adjust the height as needed */
+    background-color: rgb(43,100, 56); /* Choose your color */
+    animation: load 6s linear forwards; /* 6s to sync with quote change */
+}
+
+@keyframes load {
+    to {
+        width: 95%;
+    }
 }

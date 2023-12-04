@@ -113,10 +113,11 @@ const LoadingScreen: React.FC = () => {
 
     return (
         <>
-        <div className="loading-screen-container">
-            <h2 className={className}>"{currentQuote}"</h2>
-        </div>
-        <span className="loading-screen-footer">- we are working on generating your content please be patient :) -</span>
+            <div className="loading-screen-container">
+                <h2 className={className}>{currentQuote}</h2>
+                <div className="loading-bar"></div> {/* Loading bar container */}
+            </div>
+            <span className="loading-screen-footer">- We are working on generating your content please be patient :) -</span>
         </>
     );
 };

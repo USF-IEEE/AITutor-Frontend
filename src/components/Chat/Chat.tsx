@@ -29,7 +29,7 @@ const Chat: React.FC = () => {
         sessionKey,
         updateSessionKey,
         updateConceptList,
-        promptType,
+        // promptType,
         updatePromptType
     } = useContext<TutorContextProps>(TutorContext);
 
@@ -70,13 +70,20 @@ const Chat: React.FC = () => {
             console.log('Status Code:', response.status);
             console.log('Response Data:', response.data);
 
-
             updateSessionKey(response.data.session_key);
-            updateCurrentState(response.data.current_state);
+
+            const newState = response.data.current_state;
+            updateCurrentState(newState);
             updatePromptType(response.data.response.prompt.type);
             updateConceptList(response.data.response.prompt.question.split("[SEP]"));
 
-            const newResponse = promptType==-1 ? new Message("Awesome work! Now answer the following questionare and we'll take care of the rest for you!", false) : new Message(response.data.response.prompt.question, false);
+        let newResponse:Message;
+        if (newState === 4) {
+            newResponse = new Message("Awesome work!! \nNow answer the questionare on the left. you are one step further from a new learning experience!", false);
+        } else {
+            newResponse = new Message(response.data.response.prompt.question, false);
+        }
+            
             setChat((prevChat) => [...prevChat, newResponse]);
 
 

@@ -5,7 +5,7 @@ import './Instructions.css';
 const Instructions: React.FC = () => {
   return (
     <div className='instruction-container'>
-      <img style={{width:"95%", minWidth:"400px", display:"block", margin:"auto"}} src={landingPageSchema}></img>
+      <img style={{padding:"0.5rem", width:"90%", maxWidth:"800px", maxHeight:"850px", minWidth:"400px", display:"block", margin:"auto"}} src={landingPageSchema}></img>
     </div>
   );
 };
