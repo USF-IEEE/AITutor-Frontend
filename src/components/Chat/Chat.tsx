@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef, useContext } from 'react'
 import { TutorContext, TutorContextProps } from '../../TutorContext';
 import SuggestedResponseBubble from '../SuggestedResponseBubble/SuggestedResponseBubble';
 import axios from 'axios';
-import Loading from '../Loading/Loading';
+import Typing from '../Typing/Typing';
 
 
 interface ChatBubble {
@@ -148,7 +148,7 @@ const Chat: React.FC = () => {
                 {renderSuggestedResponses()}
                 {/* keep element visible container scrolled down */}
 
-                {loading && <div id='loading-element' ref={loadingElement}><Loading error={error} /></div>}
+                {loading && <div id='loading-element' ref={loadingElement}><Typing error={error} /></div>}
                 <br></br>
             </div>
             <form className='prompt-submit' onSubmit={handleSubmit}>

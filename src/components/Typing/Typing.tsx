@@ -1,5 +1,5 @@
-import "./Loading.css"
-const Loading = ({error} : {error:string | undefined}) => {
+import "./Typing.css"
+const Typing = ({error} : {error:string | undefined}) => {
     return (
         <div className="message-bubble message-bubble-response">
       <div className="message-bubble-user" style={{ fontWeight: 800 }}>Rocky</div>
@@ -17,4 +17,4 @@ const Loading = ({error} : {error:string | undefined}) => {
     )
 }
 
-export default Loading;
+export default Typing;

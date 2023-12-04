@@ -3,6 +3,7 @@ import Questionare from "../Questionare/Questionare";
 import Instructions from "../Intructions/Instructions";
 import { TutorContext, TutorContextProps } from "../../TutorContext";
 import "./Content.css"
+import LoadingScreen from "../LoadingScreen/LoadingScreen";
 
 const Content: React.FC = () => {
   const { currentState } = useContext<TutorContextProps>(TutorContext);
@@ -26,7 +27,7 @@ const Content: React.FC = () => {
         setCurrentContent(<Questionare />);
         break;
       default:
-        setCurrentContent(<Instructions />);
+        setCurrentContent(<LoadingScreen/>);
         break;
     }
   }, [currentState]);
