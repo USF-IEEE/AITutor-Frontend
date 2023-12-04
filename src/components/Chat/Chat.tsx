@@ -2,7 +2,7 @@ import MessageBubble from '../MessageBubble/MessageBubble'
 import './Chat.css'
 import React, { useState, useEffect, useRef, useContext } from 'react'
 import { TutorContext, TutorContextProps } from '../../TutorContext';
-import SuggestedResponseBubble from './SuggestedResponseBubble/SuggestedResponseBubble';
+import SuggestedResponseBubble from '../SuggestedResponseBubble/SuggestedResponseBubble';
 import axios from 'axios';
 import Loading from '../Loading/Loading';
 
@@ -25,11 +25,9 @@ const Chat: React.FC = () => {
 
     // context vars
     const {
-        currentState,
         updateCurrentState,
         sessionKey,
         updateSessionKey,
-        conceptList,
         updateConceptList,
         promptType,
         updatePromptType

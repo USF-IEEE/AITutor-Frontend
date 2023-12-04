@@ -2,7 +2,6 @@ import { TutorContext, TutorContextProps } from "../../TutorContext";
 import "./Questionare.css"
 import React, { useContext, useState } from "react";
 import axios from "axios";
-import MultipleChoiceForm from "../MultipleChoiceForm/MultipleChoiceForm";
 
 // The purpose of this form is to get the concepts and the student learning 
 // preferences. we are building a concept based tutor.
