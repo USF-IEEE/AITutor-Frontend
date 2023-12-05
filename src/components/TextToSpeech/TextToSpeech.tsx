@@ -1,19 +1,21 @@
 import React from 'react';
 import axios from 'axios';
+import soundIcon from "../../assets/icons/audio-svgrepo-com.svg"
 
 interface TTSProps {
   text: string;
 }
 
 const TextToSpeech: React.FC<TTSProps> = ({ text }) => {
-  const openaiApiKey = process.env.REACT_APP_OPENAI_API_KEY;
-  
-  React.useEffect(() => {
+
+    const openaiApiKey = "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";
     const synthesizeSpeech = async () => {
+        console.log("audioing?")
       try {
         const response = await axios.post(
-          'https://api.openai.com/v1/engines/davinci/tts',
-          { input: text, voice: "echo" },
+          'https://api.openai.com/v1/audio/speech',
+          { input: text, voice: "echo", model:"tts-1"
+        },
           {
             headers: {
               'Authorization': `Bearer ${openaiApiKey}`,
@@ -30,13 +32,11 @@ const TextToSpeech: React.FC<TTSProps> = ({ text }) => {
         console.error('Error with OpenAI TTS:', error);
       }
     };
-
-    if (text) {
-      synthesizeSpeech();
-    }
-  }, [text]);
+    
     // This component does not render anything
-    return null;
+    return <button style={{width:"25px", height:"25px", padding:4}} onClick={synthesizeSpeech}>
+        <img src={soundIcon} alt='sound-icon'></img>
+    </button>
 };
 
 export default TextToSpeech;

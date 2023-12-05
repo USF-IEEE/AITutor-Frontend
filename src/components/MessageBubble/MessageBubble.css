@@ -7,6 +7,13 @@
     z-index: 100;
 }
 
+.message-bubble-user{
+    display:flex;
+    align-items:center;
+    gap: .5rem;
+    font-weight: 800;
+}
+
 .message-bubble-message {
     margin: .5rem 0;
     padding: 1rem;

@@ -80,7 +80,7 @@ const dummySlides: SlideResponse = {
     ],
     "current_obj_idx": 0,
     "num_slides": 16,
-    "conversational_response": "text"
+    "conversational_response": ""
 }
 
 // settting default values

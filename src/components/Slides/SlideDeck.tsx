@@ -2,7 +2,6 @@ import React, { useContext, useState } from "react";
 import Slide from "./Slide";
 import "./Slides.css"
 import { TutorContext, TutorContextProps } from "../../TutorContext";
-import TextToSpeech from "../TextToSpeech/TextToSpeech";
 
 
 const SlideDeck: React.FC = () => {
@@ -32,7 +31,6 @@ const SlideDeck: React.FC = () => {
                     }
                 > Next </button>
             </div>
-            <TextToSpeech text={slides.conversational_response}/>
         </>
     );
 }

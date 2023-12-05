@@ -5,8 +5,6 @@ import { TutorContext, TutorContextProps } from '../../TutorContext';
 import SuggestedResponseBubble from '../SuggestedResponseBubble/SuggestedResponseBubble';
 import axios from 'axios';
 import Typing from '../Typing/Typing';
-import TextToSpeech from '../TextToSpeech/TextToSpeech';
-
 
 interface ChatBubble {
     message: string;
@@ -48,8 +46,7 @@ const Chat: React.FC = () => {
     const [message, setMessage] = useState<string>("");
 
     const WelcomeMessage = new Message("Welcome to Teach-A-Bull! What do you want to learn today?", false)
-    
-    const [audio, setAudio] = useState<string>(slides.conversational_response)
+
     const [chat, setChat] = useState<any[]>([WelcomeMessage]);
     const chatContainerRef = useRef<HTMLDivElement | null>(null);
     const loadingElement = useRef<HTMLDivElement | null>(null);
@@ -85,8 +82,10 @@ const Chat: React.FC = () => {
         let newResponse:Message;
         if (newState === 4) {
             newResponse = new Message("Awesome work!! \nNow answer the questionare on the left. you are one step further from a new learning experience!", false);
+            synthesizeSpeech("Awesome work!! \nNow answer the questionare on the left. you are one step further from a new learning experience!")
         } else {
             newResponse = new Message(response.data.response.prompt.question, false);
+            synthesizeSpeech(response.data.response.prompt.question)
         }
             
             setChat((prevChat) => [...prevChat, newResponse]);
@@ -128,15 +127,30 @@ const Chat: React.FC = () => {
         console.log("Updated current state:", suggestedResponse);
     }, [currentState]);
 
-    // 
-    useEffect(() => {
-        setAudio(audio) // updates the new coverstaional_response
-        playAudio(audio)
-    }, [audio])
+    const openaiApiKey = "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";
+    const synthesizeSpeech =  async (text:string) => {
+        console.log("auidioing?")
 
-    const playAudio = (audio:string) =>{
-        return <TextToSpeech text={audio}/>
-    }
+      try {
+        const response =  await axios.post(
+          'https://api.openai.com/v1/audio/speech',
+          { input: text, voice: "echo", model:"tts-1"
+        },
+          {
+            headers: {
+              'Authorization': `Bearer ${openaiApiKey}`,
+              'Content-Type': 'application/json',
+            },
+            responseType: 'blob' // Expect a binary response, not JSON
+          }
+        );
+        const url = URL.createObjectURL(new Blob([response.data]));
+        const audio = new Audio(url);
+        audio.play();
+      } catch (error) {
+        console.error('Error with OpenAI TTS:', error);
+      }
+    };
 
     // This makes sure the content is visible when chat overflows
     useEffect(() => {
@@ -144,6 +158,7 @@ const Chat: React.FC = () => {
             chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight
         }
     }, [chat]);
+    
 
     const renderSuggestedResponses = () => {
 
@@ -162,10 +177,23 @@ const Chat: React.FC = () => {
         };
     }
 
+    const renderConversationalResponse = () => {
+
+        if (currentState == 2){
+            if (slides.conversational_response) { return <div></div> }
+
+            else {
+                return(<MessageBubble message={slides.conversational_response} isPrompt={false}/>)
+            };
+        }
+        return null
+    }
+    
     return (
         <div id='chat-container'>
             <h3 className='watermark'>Teach-A-Bull</h3>
             <div className='text-container' ref={chatContainerRef}>
+                
                 {chat.map((item: Message, key: React.Key) => {
                     return (
                         <MessageBubble key={key} message={item.message} isPrompt={item.isPrompt} />
@@ -173,6 +201,7 @@ const Chat: React.FC = () => {
                 })
                 }
                 {renderSuggestedResponses()}
+                {renderConversationalResponse()}
                 {/* keep element visible container scrolled down */}
 
                 {loading && <div id='loading-element' ref={loadingElement}><Typing error={error} /></div>}
@@ -195,6 +224,7 @@ const Chat: React.FC = () => {
                 </div>
             </form>
         </div>
+        
     )
 }
 
