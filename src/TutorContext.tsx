@@ -21,7 +21,7 @@ export interface TutorContextProps {
     promptType: number;
     updatePromptType: (newSessionKey: number) => void;
 
-    slides:SlideObject ;
+    slides:SlideObject;
     updateSlides: (newSlides:SlideObject) => void;
   }
   

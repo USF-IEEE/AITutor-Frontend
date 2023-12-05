@@ -9,7 +9,7 @@ import LoadingScreen from "../LoadingScreen/LoadingScreen";
 
 const Questionare: React.FC = () => {
 
-    const updateSlides = useContext(TutorContext)
+    const { updateSlides } = useContext<TutorContextProps>(TutorContext)
 
     const { conceptList, updateConceptList } = useContext<TutorContextProps>(TutorContext);
     const { sessionKey } = useContext<TutorContextProps>(TutorContext)
@@ -24,34 +24,36 @@ const Questionare: React.FC = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
     // make post request sending all the data back to the tutor
-    const submitForm = () => {
+    const submitForm = async () => {
         setIsLoading(true);
-        console.log("Sending questionare data...");
         const url = 'http://127.0.0.1:8000/session/'; // Change to actual API URL.
-
+    
         const data = {
-            "user_prompt": "",
-            "session_key": sessionKey,
-            "list_concepts": conceptList,
-            "student_interests": studentInterest,
-            "num_questions": questionNumber,
-            "testing_preference": testingPreference,
-            "student_slides": slidesPreference,
-            "student_questions": questionPreference
+            user_prompt: "", // Ensure this is the intended value
+            session_key: sessionKey,
+            list_concepts: conceptList,
+            student_interests: studentInterest,
+            num_questions: questionNumber,
+            testing_preference: testingPreference,
+            student_slides: slidesPreference,
+            student_questions: questionPreference
         };
-        console.log(data);
-
-        axios.post(url, data)
-            .then(response => {
-                console.log('Status Code:', response.status);
-                console.log('Response Data:', response.data);
-                //
-            })
-            .catch(error => {
-                console.error('Error during POST request:', error);
-            })
-            .finally(() => setIsLoading(false));
+    
+        try {
+            const response = await axios.post(url, data);
+    
+            if (response.data && response.data.response && response.data.response.teaching && response.data.response.teaching.slides) {
+                updateSlides(response.data.response.teaching.slides);
+            } else {
+                console.error('Unexpected response structure:', response.data);
+            }
+        } catch (error) {
+            console.error('Error during POST request:', error);
+        } finally {
+            setIsLoading(false);
+        }
     };
+    
 
     function removeConcept(index: number) {
         const newConcepts = [...conceptList];
