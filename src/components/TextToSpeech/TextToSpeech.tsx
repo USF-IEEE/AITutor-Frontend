@@ -8,7 +8,7 @@ interface TTSProps {
 
 const TextToSpeech: React.FC<TTSProps> = ({ text }) => {
 
-    const openaiApiKey = "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";
+    const openaiApiKey = process.env.REACT_APP_OPENAI_API_KEY;
     const synthesizeSpeech = async () => {
         console.log("audioing?")
       try {
