@@ -9,10 +9,7 @@ import LoadingScreen from "../LoadingScreen/LoadingScreen";
 
 const Questionare: React.FC = () => {
 
-    const { updateSlides } = useContext<TutorContextProps>(TutorContext)
-
-    const { conceptList, updateConceptList } = useContext<TutorContextProps>(TutorContext);
-    const { sessionKey } = useContext<TutorContextProps>(TutorContext)
+    const { updateSlides, conceptList, updateConceptList, sessionKey } = useContext<TutorContextProps>(TutorContext)
 
     const [questionNumber, setQuestionNumber] = useState<number>(0)
     const [studentInterest, setStudentInterest] = useState<string>('')

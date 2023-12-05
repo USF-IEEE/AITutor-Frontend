@@ -93,6 +93,8 @@ const Chat: React.FC = () => {
 
         } catch (error: any) {
             console.error('Error during POST request:', error);
+            let newResponse = new Message(`${error}`, false)
+            setChat((prevChat) => [...prevChat, newResponse]);
             setError(error.code);
         } finally {
             setLoading(false);
