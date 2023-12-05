@@ -80,5 +80,5 @@ hr {
   align-items: center;
   border: rgb(144, 144, 144) 1px solid;
   gap: 1.75rem;
-  text-align: center;
+  overflow-y: scroll;
 }

@@ -9,6 +9,7 @@ import LoadingScreen from "../LoadingScreen/LoadingScreen";
 
 const Questionare: React.FC = () => {
 
+    const updateSlides = useContext(TutorContext)
 
     const { conceptList, updateConceptList } = useContext<TutorContextProps>(TutorContext);
     const { sessionKey } = useContext<TutorContextProps>(TutorContext)
@@ -44,6 +45,7 @@ const Questionare: React.FC = () => {
             .then(response => {
                 console.log('Status Code:', response.status);
                 console.log('Response Data:', response.data);
+                //
             })
             .catch(error => {
                 console.error('Error during POST request:', error);

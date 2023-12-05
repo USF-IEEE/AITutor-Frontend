@@ -1,5 +1,12 @@
 import React, { createContext, ReactNode, useState } from 'react';
 
+type SlideObject = {
+    title:string,
+    content:string,
+    latex:string,
+    concepts:string[]
+} | null;
+
 // contexts props is the variables or data shared to all children
 export interface TutorContextProps {
     sessionKey: string;
@@ -13,18 +20,23 @@ export interface TutorContextProps {
   
     promptType: number;
     updatePromptType: (newSessionKey: number) => void;
+
+    slides:SlideObject ;
+    updateSlides: (newSlides:SlideObject) => void;
   }
   
 // settting default values
 const TutorContext = createContext<TutorContextProps>({
     sessionKey: '',
     updateSessionKey: () => {},
-    currentState: -2,
+    currentState: 0,
     updateCurrentState: () => {},
     conceptList: [],
     updateConceptList: () => {},
     promptType: -2,
     updatePromptType: () => {},
+    slides: null,
+    updateSlides: () => {}
 });
 
 
@@ -39,7 +51,7 @@ const TutorProvider: React.FC<TutorProviderProps> = ({ children }) => {
         setSessionKey(newSessionKey);
     };
 
-    const [currentState, setCurrentState] = useState<number>(-2)
+    const [currentState, setCurrentState] = useState<number>(0)
     const updateCurrentState = (newCurrentState: number) => {
         setCurrentState(newCurrentState);
     };
@@ -54,6 +66,11 @@ const TutorProvider: React.FC<TutorProviderProps> = ({ children }) => {
         setPromptType(newPromptType);
     }
 
+    const [slides, setSlides] = useState<SlideObject>(null);
+    const updateSlides = (newSlides:SlideObject) => {
+        return setSlides(newSlides);
+    }
+
     const contextValue: TutorContextProps = {
         sessionKey,
         updateSessionKey,
@@ -63,6 +80,8 @@ const TutorProvider: React.FC<TutorProviderProps> = ({ children }) => {
         updateConceptList,
         promptType,
         updatePromptType,
+        slides,
+        updateSlides
       };
       
     

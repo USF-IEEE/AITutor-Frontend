@@ -1,0 +1,41 @@
+.slide-deck-container {
+    height: 80%;
+    background-color: #242424;
+    width: 90%;
+    margin: 2rem auto;
+    border-radius: 5px;
+}
+
+.slide {
+    max-height: 80dvh;
+    overflow-y: scroll;
+}
+
+.slide > h2 {
+    margin: auto;
+    padding: 2rem;
+    font-size: 40px;
+    max-width: 70%;
+}
+
+.slide > ul > li {
+    font-size: 24px;
+    max-width: 80%;
+    margin: auto;
+    padding: 2rem 0;
+    text-align: left;
+    list-style: none;
+}
+
+.slide-controllers{
+    display: flex;
+    justify-content: space-evenly;
+    position: absolute;
+    left: 0;
+    bottom: 5;
+    width: 100%;
+}
+
+.slide-controllers > button {
+    width: 180px;
+}
