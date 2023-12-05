@@ -5,6 +5,7 @@ import { TutorContext, TutorContextProps } from '../../TutorContext';
 import SuggestedResponseBubble from '../SuggestedResponseBubble/SuggestedResponseBubble';
 import axios from 'axios';
 import Typing from '../Typing/Typing';
+import TextToSpeech from '../TextToSpeech/TextToSpeech';
 
 
 interface ChatBubble {
@@ -31,7 +32,8 @@ const Chat: React.FC = () => {
         updateSessionKey,
         updateConceptList,
         // promptType,
-        updatePromptType
+        updatePromptType,
+        slides
     } = useContext<TutorContextProps>(TutorContext);
 
     // making an array of objects where the text will have a different layout depending on if its a response or a prompt
@@ -46,6 +48,8 @@ const Chat: React.FC = () => {
     const [message, setMessage] = useState<string>("");
 
     const WelcomeMessage = new Message("Welcome to Teach-A-Bull! What do you want to learn today?", false)
+    
+    const [audio, setAudio] = useState<string>(slides.conversational_response)
     const [chat, setChat] = useState<any[]>([WelcomeMessage]);
     const chatContainerRef = useRef<HTMLDivElement | null>(null);
     const loadingElement = useRef<HTMLDivElement | null>(null);
@@ -124,6 +128,15 @@ const Chat: React.FC = () => {
         console.log("Updated current state:", suggestedResponse);
     }, [currentState]);
 
+    // 
+    useEffect(() => {
+        setAudio(audio) // updates the new coverstaional_response
+        playAudio(audio)
+    }, [audio])
+
+    const playAudio = (audio:string) =>{
+        return <TextToSpeech text={audio}/>
+    }
 
     // This makes sure the content is visible when chat overflows
     useEffect(() => {

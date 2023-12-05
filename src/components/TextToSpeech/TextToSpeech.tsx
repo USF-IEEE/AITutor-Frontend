@@ -35,8 +35,8 @@ const TextToSpeech: React.FC<TTSProps> = ({ text }) => {
       synthesizeSpeech();
     }
   }, [text]);
-
-  return null; // This component does not render anything
+    // This component does not render anything
+    return null;
 };
 
 export default TextToSpeech;

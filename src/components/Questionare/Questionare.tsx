@@ -13,7 +13,6 @@ const Questionare: React.FC = () => {
 
     const [questionNumber, setQuestionNumber] = useState<number>(0)
     const [studentInterest, setStudentInterest] = useState<string>('')
-    const [testingPreference, setTestingPreference] = useState<string>('')
     const [slidesPreference, setSlidesPreference] = useState<string>('')
     const [questionPreference, setQuestionPreference] = useState<string>('')
 
@@ -31,7 +30,6 @@ const Questionare: React.FC = () => {
             list_concepts: conceptList,
             student_interests: studentInterest,
             num_questions: questionNumber,
-            testing_preference: testingPreference,
             student_slides: slidesPreference,
             student_questions: questionPreference
         };
@@ -105,12 +103,6 @@ const Questionare: React.FC = () => {
                 <h2>Student Interests</h2>
                 <p>Tell us more about yourself and what kinds of things you like to do or find interesting? We will use this to connect language and ideas to things you're interested in when I teach you later:</p>
                 <textarea value={studentInterest} onChange={(e) => { setStudentInterest(e.target.value) }} placeholder="example: I love sports and history"></textarea>
-            </div>
-
-            <div className="question-container">
-                <h2>Testing Preferences</h2>
-                <p>What types of questions do you want?</p>
-                <textarea value={testingPreference} onChange={(e) => { setTestingPreference(e.target.value) }} placeholder="example: conceptual, coding, math, literature"></textarea>
             </div>
 
             <div className="question-container">
