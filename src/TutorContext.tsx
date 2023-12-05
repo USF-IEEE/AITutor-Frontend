@@ -31,6 +31,7 @@ export interface TutorContextProps {
 
     slides: SlideResponse;
     updateSlides: (newSlides: SlideResponse) => void;
+
 }
 
 const dummySlides: SlideResponse = {

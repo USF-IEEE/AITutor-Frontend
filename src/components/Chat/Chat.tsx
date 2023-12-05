@@ -97,7 +97,7 @@ const Chat: React.FC = () => {
         } catch (error: any) {
             console.error('Error during POST request:', error);
             let newResponse = new Message(`${error}`, false)
-            setChat((prevChat) => [...prevChat, newResponse]);
+            setChat((prevChat) => [...prevChat, newResponse]); // add to chat
             setError(error.code);
         } finally {
             setLoading(false);
@@ -127,7 +127,7 @@ const Chat: React.FC = () => {
         console.log("Updated current state:", suggestedResponse);
     }, [currentState]);
 
-    const openaiApiKey = "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";
+    const openaiApiKey = ""; //TODO: change this
     const synthesizeSpeech =  async (text:string) => {
         console.log("auidioing?")
 

@@ -42,7 +42,7 @@ const Content: React.FC = () => {
   return (
     <aside className="content-container">
       {currentContent}
-      <h1 style={{position:"absolute"}}>{currentState}</h1>
+      {/* <h1 style={{position:"absolute"}}>{currentState}</h1> */}
     </aside>
   );
 };

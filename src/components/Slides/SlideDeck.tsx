@@ -9,6 +9,9 @@ const SlideDeck: React.FC = () => {
     const {slides} = useContext<TutorContextProps>(TutorContext);
 
     const [slideIndex, setSlideIndex] = useState(0); // set to first slide
+    
+    // const handleSlideChange = async ()
+
     return (
         <>
             <div className="slide-deck-container">
@@ -28,6 +31,7 @@ const SlideDeck: React.FC = () => {
                                 ? slides.slides.length - 1
                                 : slideIndex + 1
                         )
+                        handlingSlideChange();
                     }
                 > Next </button>
             </div>
