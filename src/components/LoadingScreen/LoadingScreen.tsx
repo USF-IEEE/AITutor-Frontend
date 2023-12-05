@@ -106,7 +106,7 @@ const LoadingScreen: React.FC = () => {
         };
 
         changeQuote(); // Set the first quote
-        const interval = setInterval(changeQuote, 6000); // Include fade-out time
+        const interval = setInterval(changeQuote, 10000); // Include fade-out time
 
         return () => clearInterval(interval);
     }, [quotes]);
