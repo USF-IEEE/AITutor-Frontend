@@ -25,6 +25,7 @@ const Chat: React.FC = () => {
 
     // context vars
     const {
+        currentState,
         updateCurrentState,
         sessionKey,
         updateSessionKey,
@@ -100,7 +101,7 @@ const Chat: React.FC = () => {
 
     function handleSubmit(event: React.FormEvent<HTMLFormElement>): void {
         event.preventDefault();
-        setSuggestedResponse([])
+        setSuggestedResponse([]) //empty suggested responses list on submit
         makeRequest(message);
     }
 
@@ -114,8 +115,12 @@ const Chat: React.FC = () => {
     // This is debug for suggested response.
     useEffect(() => {
         console.log("Updated suggested responses:", suggestedResponse);
-
     }, [suggestedResponse]);
+
+    // This is debug for current state.
+    useEffect(() => {
+        console.log("Updated current state:", suggestedResponse);
+    }, [currentState]);
 
 
     // This makes sure the content is visible when chat overflows
