@@ -1,10 +1,11 @@
 import MessageBubble from '../MessageBubble/MessageBubble'
 import './Chat.css'
-import React, { useState, useEffect, useRef, useContext } from 'react'
+import React, { useState, useEffect, useRef, useContext, useCallback } from 'react'
 import { TutorContext, TutorContextProps } from '../../TutorContext';
 import SuggestedResponseBubble from '../SuggestedResponseBubble/SuggestedResponseBubble';
 import axios from 'axios';
 import Typing from '../Typing/Typing';
+import { ChatContext } from '../ChatContext/ChatContext';
 
 interface ChatBubble {
     message: string;
@@ -29,9 +30,12 @@ const Chat: React.FC = () => {
         sessionKey,
         updateSessionKey,
         updateConceptList,
-        // promptType,
         updatePromptType,
-        slides
+        slides,
+        updateSlides,
+        currentObjIdx,
+        updateCurrentObjIdx,
+        setMakeRequest
     } = useContext<TutorContextProps>(TutorContext);
 
     // making an array of objects where the text will have a different layout depending on if its a response or a prompt
@@ -41,11 +45,11 @@ const Chat: React.FC = () => {
     //prompt will be an object with isPrompt == True (USER)
     //response will be an object with isPrompt == False (AI TUTOR)
     //each will have a message attribute with the content. 
-
+    
     const [suggestedResponse, setSuggestedResponse] = useState<string[]>([]);
-    const [message, setMessage] = useState<string>("");
 
     const WelcomeMessage = new Message("Welcome to Teach-A-Bull! What do you want to learn today?", false)
+    // setChat((prevChat) => [...prevChat, WelcomeMessage]);
 
     const [chat, setChat] = useState<any[]>([WelcomeMessage]);
     const chatContainerRef = useRef<HTMLDivElement | null>(null);
@@ -53,14 +57,48 @@ const Chat: React.FC = () => {
     const [loading, setLoading] = useState<boolean>();
     const [error, setError] = useState<string | undefined>();
 
+    const [message, setMessage] = useState<string>("");
+    const addNewMessage = useCallback((messageText: string, isPrompt: boolean) => {
+        const newMessage = new Message(messageText, isPrompt);
+        setChat(prevChat => [...prevChat, newMessage]);
+    }, []);
 
-    async function makeRequest(prompt: string): Promise<void> {
+
+    const makeRequest= async (prompt: string)  => {
         console.log("Making request with prompt: " + prompt);
         const url = 'http://127.0.0.1:8000/session/'; // Change to actual API URL.
-
-        const data = {
+        let data = {
             "session_key": sessionKey,
             "user_prompt": prompt,
+            "obj_idx": -1
+        };
+
+        if (currentState == 0)
+        data = {
+            "session_key": sessionKey,
+            "user_prompt": prompt,
+            "obj_idx": currentObjIdx
+        };
+        else if (currentState == 1){
+            data = {
+                "session_key": sessionKey,
+                "user_prompt": prompt,
+                "obj_idx": currentObjIdx
+            };
+        }
+        else if (currentState == 2) {
+            data = {
+                "session_key": sessionKey,
+                "user_prompt": prompt,
+                "obj_idx": currentObjIdx
+            };   
+        }
+        
+        else if (currentState == 4)
+        data = {
+            "session_key": sessionKey,
+            "user_prompt": prompt,
+            "obj_idx": currentObjIdx
         };
 
         setLoading(true);
@@ -80,16 +118,23 @@ const Chat: React.FC = () => {
             updateConceptList(response.data.response.prompt.question.split("[SEP]"));
 
         let newResponse:Message;
-        if (newState === 4) {
+        if (newState === 4) { /* Generation */
             newResponse = new Message("Awesome work!! \nNow answer the questionare on the left. you are one step further from a new learning experience!", false);
             synthesizeSpeech("Awesome work!! \nNow answer the questionare on the left. you are one step further from a new learning experience!")
-        } else {
+        } 
+
+        else if(newState == 1) {/* Teaching */
+            updateSlides(response.data.response.teaching);
+            newResponse = new Message(slides.conversational_response, false);
+            synthesizeSpeech(slides.conversational_response);
+        }
+
+        else if (newState == 0) { /* Prompting */
             newResponse = new Message(response.data.response.prompt.question, false);
             synthesizeSpeech(response.data.response.prompt.question)
         }
             
             setChat((prevChat) => [...prevChat, newResponse]);
-
 
             // Replace the suggested responses with the new ones
             setSuggestedResponse(response.data.response.prompt.suggested_responses);
@@ -102,11 +147,13 @@ const Chat: React.FC = () => {
         } finally {
             setLoading(false);
         }
-    }
+    };
+    // , [sessionKey, sessionKey, currentObjIdx, currentState, updateCurrentState, updateSlides, updatePromptType, updateConceptList, setMakeRequest]);
 
     function handleSubmit(event: React.FormEvent<HTMLFormElement>): void {
         event.preventDefault();
         setSuggestedResponse([]) //empty suggested responses list on submit
+
         makeRequest(message);
     }
 
@@ -126,6 +173,7 @@ const Chat: React.FC = () => {
     useEffect(() => {
         console.log("Updated current state:", suggestedResponse);
     }, [currentState]);
+
 
     const openaiApiKey = ""; //TODO: change this
     const synthesizeSpeech =  async (text:string) => {
@@ -190,6 +238,7 @@ const Chat: React.FC = () => {
     }
     
     return (
+        <ChatContext.Provider value={{ addNewMessage }}>
         <div id='chat-container'>
             <h3 className='watermark'>Teach-A-Bull</h3>
             <div className='text-container' ref={chatContainerRef}>
@@ -224,8 +273,9 @@ const Chat: React.FC = () => {
                 </div>
             </form>
         </div>
-        
+    </ChatContext.Provider>
     )
+
 }
 
 export default Chat;

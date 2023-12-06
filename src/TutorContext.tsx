@@ -31,7 +31,13 @@ export interface TutorContextProps {
 
     slides: SlideResponse;
     updateSlides: (newSlides: SlideResponse) => void;
+    // For Objects in the Program
+    currentObjIdx: number;
+    updateCurrentObjIdx : (newObjIdx: number) => void;
 
+    // chat_obj
+    makeRequest: (prompt: string)  => Promise<void>;
+    setMakeRequest: ( newMakeRequest: (prompt: string) => Promise<void>) => void;
 }
 
 const dummySlides: SlideResponse = {
@@ -95,7 +101,11 @@ const TutorContext = createContext<TutorContextProps>({
     promptType: -2,
     updatePromptType: () => { },
     slides: dummySlides,
-    updateSlides: () => { }
+    updateSlides: () => { },
+    currentObjIdx: -1,
+    updateCurrentObjIdx: () => { },
+    makeRequest: () => Promise.resolve(),
+    setMakeRequest: () => {}
 });
 
 
@@ -130,6 +140,19 @@ const TutorProvider: React.FC<TutorProviderProps> = ({ children }) => {
         return setSlides(newSlides);
     }
 
+    const [currentObjIdx, setCurrentObjIdx] = useState<number>(0)
+    const updateCurrentObjIdx = (newObjIdx: number) => {
+        setCurrentObjIdx(newObjIdx);
+    };
+
+    const [makeRequest, setMakeRequestState] = useState<(prompt: string) => Promise<void>>(
+        async (prompt: string) => { /* Default implementation of makeRequest */ }
+    );
+
+    const setMakeRequest = (newMakeRequest: (prompt: string) => Promise<void>) => {
+        setMakeRequestState(newMakeRequest);
+    };
+
     const contextValue: TutorContextProps = {
         sessionKey,
         updateSessionKey,
@@ -140,7 +163,11 @@ const TutorProvider: React.FC<TutorProviderProps> = ({ children }) => {
         promptType,
         updatePromptType,
         slides,
-        updateSlides
+        updateSlides,
+        makeRequest,
+        setMakeRequest,
+        currentObjIdx,
+        updateCurrentObjIdx
     };
 
 
